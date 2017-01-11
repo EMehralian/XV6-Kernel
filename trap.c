@@ -52,7 +52,10 @@ trap(struct trapframe *tf)
       acquire(&tickslock);
       ticks++;
       if(proc && proc->state == RUNNING)
-        proc->rtime++;
+        {
+          proc->rtime++;
+          // cprintf("ticked\n\n\n");
+        }
       wakeup(&ticks);
       release(&tickslock);
     }
