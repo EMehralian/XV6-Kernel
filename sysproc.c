@@ -98,3 +98,17 @@ sys_getppid(void)
   // printf("Hello");
    return proc->parent->pid+6;
 }
+
+int
+sys_getPerformanceData(void)
+{
+  // int* wtime;
+  // int* rtime;
+  // argint(0,wtime);
+  // argint(1,rtime);
+  // wtime = (int*)malloc(4);
+  // rtime = (int*)malloc(4);
+  // wtime[0] = proc->etime-proc->ctime-proc->rtime;
+  // rtime[0] = proc->rtime;
+  return 1;
+}

@@ -49,6 +49,7 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
+  p->rtime=0;
   p->ctime = ticks; ///set create position of new process
 
   release(&ptable.lock);
