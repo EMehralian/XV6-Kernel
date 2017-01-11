@@ -36,7 +36,7 @@ allocproc(void)
 {
   struct proc *p;
   char *sp;
-
+  
   acquire(&ptable.lock);
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
@@ -49,6 +49,7 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
+  p->ctime = ticks; ///set create position of new process
 
   release(&ptable.lock);
 
@@ -81,6 +82,7 @@ found:
 void
 userinit(void)
 {
+
   struct proc *p;
   extern char _binary_initcode_start[], _binary_initcode_size[];
 
@@ -88,7 +90,7 @@ userinit(void)
   
   initproc = p;
   if((p->pgdir = setupkvm()) == 0)
-    panic("userinit: out of memory?");
+    panic("user init: out of memory?");
   inituvm(p->pgdir, _binary_initcode_start, (int)_binary_initcode_size);
   p->sz = PGSIZE;
   memset(p->tf, 0, sizeof(*p->tf));
@@ -148,7 +150,7 @@ fork(void)
     return -1;
   }
 
-  // Copy process state from p.
+  // Copy process st  ate from p.
   if((np->pgdir = copyuvm(proc->pgdir, proc->sz)) == 0){
     kfree(np->kstack);
     np->kstack = 0;
@@ -221,6 +223,7 @@ exit(void)
 
   // Jump into the scheduler, never to return.
   proc->state = ZOMBIE;
+  proc->etime = ticks;
   sched();
   panic("zombie exit");
 }
@@ -366,7 +369,7 @@ forkret(void)
 }
 
 // Atomically release lock and sleep on chan.
-// Reacquires lock when awakened.
+// Reacquires lock when awakened. 
 void
 sleep(void *chan, struct spinlock *lk)
 {
