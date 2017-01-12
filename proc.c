@@ -12,6 +12,7 @@ struct {
   struct proc proc[NPROC];
 } ptable;
 
+int processCounter;
 static struct proc *initproc;
 
 int nextpid = 1;
@@ -289,25 +290,40 @@ scheduler(void)
     // Enable interrupts on this processor.
     sti();
 
-    // Loop over process table looking for process to run.
+    int policyChooser = 0;
+    #define RR           0      // Round Robin policy
+    #define FRR           1      // FIFO Round Robin policy
+    #define GRT           2      // Guaranteed (Fair-share) Scheduling policy
+    #define Q3           3      // Multi-Level Queue Scheduling policy
+
+
+     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
-        continue;
 
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
-      proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
-      swtch(&cpu->scheduler, p->context);
-      switchkvm();
+    if(policyChooser == RR){
 
-      // Process is done running for now.
-      // It should have changed its p->state before coming back.
-      proc = 0;
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
+
+        // Switch to chosen process.  It is the process's job
+        // to release ptable.lock and then reacquire it
+        // before jumping back to us.
+        proc = p;
+        switchuvm(p);
+        p->processCounter = 0;
+        p->state = RUNNING;
+
+        swtch(&cpu->scheduler, p->context);
+        switchkvm();
+
+        // Process is done running for now.
+        // It should have changed its p->state before coming back.
+        proc = 0;
+      }
+
     }
+   
     release(&ptable.lock);
 
   }
@@ -342,10 +358,18 @@ sched(void)
 void
 yield(void)
 {
-  acquire(&ptable.lock);  //DOC: yieldlock
-  proc->state = RUNNABLE;
-  sched();
-  release(&ptable.lock);
+
+  if(proc->processCounter<QUANTA){
+    cprintf("one QUANTA passed!%d\n",proc->pid);
+  } 
+  else{
+  // for(int i=0 ; i<5;i++){
+    acquire(&ptable.lock);  //DOC: yieldlock
+    proc->state = RUNNABLE;
+    sched();
+    release(&ptable.lock);
+  // }
+  }
 }
 
 // A fork child's very first scheduling by scheduler()
