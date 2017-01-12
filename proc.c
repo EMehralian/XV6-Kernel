@@ -7,6 +7,8 @@
 #include "proc.h"
 #include "spinlock.h"
 
+int mode = -1;
+
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];
@@ -284,7 +286,7 @@ void
 scheduler(void)
 {
   struct proc *p;
-
+  
   for(;;){
     // Enable interrupts on this processor.
     sti();
@@ -295,6 +297,8 @@ scheduler(void)
       if(p->state != RUNNABLE)
         continue;
 
+      cprintf("***********************\n");
+      cprintf("mode is %d\n",mode);
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
