@@ -12,7 +12,10 @@ struct {
   struct proc proc[NPROC];
 } ptable;
 
-int processCounter;
+ // struct proc procList[NPROC+1];
+
+
+
 static struct proc *initproc;
 
 int nextpid = 1;
@@ -285,7 +288,7 @@ void
 scheduler(void)
 {
   struct proc *p;
-
+  cprintf("Hello\n");
   for(;;){
     // Enable interrupts on this processor.
     sti();
@@ -321,6 +324,16 @@ scheduler(void)
         // It should have changed its p->state before coming back.
         proc = 0;
       }
+    }
+    else if(policyChooser == FRR){
+      // for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      //   if(p->state != RUNNABLE)
+      //     continue;
+        
+      //   // procList
+      // }
+
+
 
     }
    
@@ -328,6 +341,8 @@ scheduler(void)
 
   }
 }
+
+
 
 // Enter scheduler.  Must hold only ptable.lock
 // and have changed proc->state. Saves and restores
@@ -358,17 +373,14 @@ sched(void)
 void
 yield(void)
 {
-
   if(proc->processCounter<QUANTA){
-    cprintf("one QUANTA passed!%d\n",proc->pid);
+    // cprintf("one QUANTA passed!%d\n",proc->pid);
   } 
   else{
-  // for(int i=0 ; i<5;i++){
     acquire(&ptable.lock);  //DOC: yieldlock
     proc->state = RUNNABLE;
     sched();
     release(&ptable.lock);
-  // }
   }
 }
 
@@ -511,3 +523,16 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+// void
+// pListAdd(Proc p)
+// {
+//     pList[NPROC]=p;
+// }
+
+// Proc
+// pListPush()
+// {
+//     for(int i=0 i <NPROC)
+//     pList[NPROC]=p;
+// }
