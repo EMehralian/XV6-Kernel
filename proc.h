@@ -13,6 +13,8 @@ struct cpu {
   struct proc *proc;           // The currently-running process.
 };
 
+
+
 extern struct cpu cpus[NCPU];
 extern int ncpu;
 
@@ -66,6 +68,7 @@ struct proc {
   int ctime;                   //tick of cpu when process started
   int etime;                   //tick of cpu when process ended
   int rtime;                   //number of process tiks when process is in running state
+  int processCounter;
 };
 
 // Process memory is laid out contiguously, low addresses first:

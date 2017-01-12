@@ -14,6 +14,10 @@ struct {
   struct proc proc[NPROC];
 } ptable;
 
+ // struct proc procList[NPROC+1];
+
+
+
 static struct proc *initproc;
 
 int nextpid = 1;
@@ -286,36 +290,62 @@ void
 scheduler(void)
 {
   struct proc *p;
-  
+  cprintf("Hello\n");
   for(;;){
     // Enable interrupts on this processor.
     sti();
+    //MYCODE
+    int policyChooser = 0;
+    #define RR           0      // Round Robin policy
+    #define FRR           1      // FIFO Round Robin policy
+    #define GRT           2      // Guaranteed (Fair-share) Scheduling policy
+    #define Q3           3      // Multi-Level Queue Scheduling policy
 
-    // Loop over process table looking for process to run.
+
+     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
-        continue;
+    //MYCODE
+    if(policyChooser == RR){
 
-      cprintf("***********************\n");
-      cprintf("mode is %d\n",mode);
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
-      proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
-      swtch(&cpu->scheduler, p->context);
-      switchkvm();
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
 
-      // Process is done running for now.
-      // It should have changed its p->state before coming back.
-      proc = 0;
+        // Switch to chosen process.  It is the process's job
+        // to release ptable.lock and then reacquire it
+        // before jumping back to us.
+        proc = p;
+        switchuvm(p);
+        p->processCounter = 0;
+        p->state = RUNNING;
+
+        swtch(&cpu->scheduler, p->context);
+        switchkvm();
+
+        // Process is done running for now.
+        // It should have changed its p->state before coming back.
+        proc = 0;
+      }
+      // cprintf("***********************\n");
+      // cprintf("mode is %d\n",mode);
     }
+    else if(policyChooser == FRR){
+      // for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      //   if(p->state != RUNNABLE)
+      //     continue;
+        
+      //   // procList
+      // }
+
+
+    }
+   
     release(&ptable.lock);
 
   }
 }
+
+
 
 // Enter scheduler.  Must hold only ptable.lock
 // and have changed proc->state. Saves and restores
@@ -346,10 +376,16 @@ sched(void)
 void
 yield(void)
 {
-  acquire(&ptable.lock);  //DOC: yieldlock
-  proc->state = RUNNABLE;
-  sched();
-  release(&ptable.lock);
+  if(proc->processCounter<QUANTA){
+    proc->processCounter++;
+    // cprintf("one QUANTA passed!%d\n",proc->pid);
+  } 
+  else{
+    acquire(&ptable.lock);  //DOC: yieldlock
+    proc->state = RUNNABLE;
+    sched();
+    release(&ptable.lock);
+  }
 }
 
 // A fork child's very first scheduling by scheduler()
@@ -491,3 +527,16 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+// void
+// pListAdd(Proc p)
+// {
+//     pList[NPROC]=p;
+// }
+
+// Proc
+// pListPush()
+// {
+//     for(int i=0 i <NPROC)
+//     pList[NPROC]=p;
+// }
