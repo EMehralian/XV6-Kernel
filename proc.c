@@ -14,15 +14,53 @@ struct {
 
  // struct proc procList[NPROC+1];
 
-
-
 static struct proc *initproc;
+
+int pList[NPROC] = {0} ;
+
 
 int nextpid = 1;
 extern void forkret(void);
 extern void trapret(void);
 
 static void wakeup1(void *chan);
+
+void
+addProc(int pid , int pList[])
+{
+    cprintf("in addProc");
+    for(int i=0 ; i<NPROC;i++){
+        if(pList[i]!=0) {
+            if (pList[i] == pid){
+                return;
+            }
+        } else {
+            cprintf("pocess is new and added %d in %d\n",pid,i);
+            pList[i]=pid;
+            break;
+        }
+    }
+}
+
+int
+popProc(int pList[])
+{
+    int i;
+    cprintf("in popProc\n");
+    int pid;
+    pid = pList[0];
+    for(i=1 ;i <NPROC;i++){
+        // if(pList[i]!=0)
+          pList[i-1]=pList[i];
+        // else
+        //   break;
+    }
+    pList[i]=0;
+    for(i=0 ;i <NPROC;i++)
+        if(pList[i]!=0)
+            cprintf("pid :%d is in i: %d \n",pList[i],i);
+    return pid;
+}
 
 void
 pinit(void)
@@ -117,6 +155,7 @@ userinit(void)
   acquire(&ptable.lock);
 
   p->state = RUNNABLE;
+  // addProc(p->pid,pList);
 
   release(&ptable.lock);
 }
@@ -181,6 +220,7 @@ fork(void)
   acquire(&ptable.lock);
 
   np->state = RUNNABLE;
+  // addProc(np->pid,pList);
 
   release(&ptable.lock);
 
@@ -276,6 +316,27 @@ wait(void)
   }
 }
 
+
+void sortPTable(void){
+  int counter=0;
+  int a;
+  struct proc *p;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->state!=RUNNABLE)
+      continue;
+    pList[counter]=p->pid;
+  }
+  for (int i = 0; i < counter; ++i){
+    for (int j = i; j < counter; ++i){
+      a=pList[i];
+      pList[i]=pList[j];
+      pList[j]=a;
+    }
+  }
+
+}
+
+
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
@@ -289,30 +350,33 @@ scheduler(void)
 {
   struct proc *p;
   cprintf("Hello\n");
+
   for(;;){
     // Enable interrupts on this processor.
     sti();
 
-    int policyChooser = 0;
+
     #define RR           0      // Round Robin policy
     #define FRR           1      // FIFO Round Robin policy
     #define GRT           2      // Guaranteed (Fair-share) Scheduling policy
     #define Q3           3      // Multi-Level Queue Scheduling policy
 
+    int policyChooser = FRR;
 
      // Loop over process table looking for process to run.
     acquire(&ptable.lock);
 
     if(policyChooser == RR){
-
+//        cprintf("*******************************************************************\n");
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
         if(p->state != RUNNABLE)
           continue;
-
+        cprintf("pid: %d \n ",p->pid);
         // Switch to chosen process.  It is the process's job
         // to release ptable.lock and then reacquire it
         // before jumping back to us.
         proc = p;
+        // cprintf("pid:%d\n",proc->pid);
         switchuvm(p);
         p->processCounter = 0;
         p->state = RUNNING;
@@ -325,18 +389,33 @@ scheduler(void)
         proc = 0;
       }
     }
-    else if(policyChooser == FRR){
-      // for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      //   if(p->state != RUNNABLE)
-      //     continue;
-        
-      //   // procList
-      // }
+     else if(policyChooser == FRR){
+        sortPTable();
+        for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
 
+          if(p->state != RUNNABLE)
+            continue;
+          if(pList[0]!=0 && p->pid == pList[0]){
+            cprintf("pid: %d \n ",p->pid);
+            proc = p;
+            // int thispid =
+            popProc(pList);
+            // cprintf("thispid: %d \n ",thispid);
+            // addProc(thispid,pList);
+            switchuvm(p);
+            p->processCounter = 0;
+            p->state = RUNNING;
+            swtch(&cpu->scheduler, p->context);
+            switchkvm();
+              // Process is done running for now.
+              // It should have changed its p->state before coming back.
+            proc = 0;
 
-
+          }
+        } 
     }
-   
+
+
     release(&ptable.lock);
 
   }
@@ -374,11 +453,12 @@ void
 yield(void)
 {
   if(proc->processCounter<QUANTA){
-    // cprintf("one QUANTA passed!%d\n",proc->pid);
+    proc->processCounter++;
   } 
   else{
     acquire(&ptable.lock);  //DOC: yieldlock
     proc->state = RUNNABLE;
+    // addProc(proc->pid,pList);
     sched();
     release(&ptable.lock);
   }
@@ -451,8 +531,11 @@ wakeup1(void *chan)
   struct proc *p;
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-    if(p->state == SLEEPING && p->chan == chan)
+    if(p->state == SLEEPING && p->chan == chan){
       p->state = RUNNABLE;
+      // addProc(p->pid,pList);
+
+    }
 }
 
 // Wake up all processes sleeping on chan.
@@ -477,8 +560,10 @@ kill(int pid)
     if(p->pid == pid){
       p->killed = 1;
       // Wake process from sleep if necessary.
-      if(p->state == SLEEPING)
-        p->state = RUNNABLE;
+      if(p->state == SLEEPING) {
+          p->state = RUNNABLE;
+          // addProc(p->pid,pList);
+      }
       release(&ptable.lock);
       return 0;
     }
@@ -524,15 +609,3 @@ procdump(void)
   }
 }
 
-// void
-// pListAdd(Proc p)
-// {
-//     pList[NPROC]=p;
-// }
-
-// Proc
-// pListPush()
-// {
-//     for(int i=0 i <NPROC)
-//     pList[NPROC]=p;
-// }
