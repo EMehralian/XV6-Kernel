@@ -16,6 +16,8 @@ int policyChooser = Q3;
 
 void sortProcessFIFO();
 
+void printAllRunningProcesses();
+
 struct {
     struct spinlock lock;
     struct proc proc[NPROC];
@@ -296,6 +298,7 @@ wait(void) {
 void
 scheduler(void) {
     struct proc *p;
+    printRunningProcIsValid = 0;
     while (1) {
         // Enable interrupts on this processor.
         sti();
@@ -342,6 +345,7 @@ scheduler(void) {
                 swtch(&cpu->scheduler, ptable.proc[bestIndex].context);
 //                cprintf("\nHere:I am5\n");
                 switchkvm();
+                printAllRunningProcesses();
 //                cprintf("\nHere:I am6\n");
                 // Process is done running for now.
                 // It should have changed its p->state before coming back.
@@ -374,7 +378,7 @@ scheduler(void) {
 
                 swtch(&cpu->scheduler, p->context);
                 switchkvm();
-
+                printAllRunningProcesses();
                 // Process is done running for now.
                 // It should have changed its p->state before coming back.
                 proc = 0;
@@ -398,6 +402,7 @@ scheduler(void) {
                 p->state = RUNNING;
                 swtch(&cpu->scheduler, p->context);
                 switchkvm();
+                printAllRunningProcesses();
                 // Process is done running for now.
                 // It should have changed its p->state before coming back.
                 proc = 0;
@@ -610,5 +615,19 @@ void sortProcessFIFO() {
 //        }
 //    }
 //    cprintf("**************************\n");
+}
+
+void printAllRunningProcesses() {
+    if (printRunningProcIsValid==1) {
+        cprintf("\n$$$$$$$$Running Processes are:");
+        int i=0;
+        for (i = 0; i < NPROC; ++i) {
+            if (ptable.proc[i].state == RUNNABLE ||
+                ptable.proc[i].state == RUNNING) {
+                cprintf("<%d>", &ptable.proc[i].pid);
+            }
+        }
+        cprintf("\n");
+    }
 }
 

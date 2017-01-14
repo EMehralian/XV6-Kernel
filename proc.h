@@ -78,6 +78,7 @@ struct proc {
   int piority;
 };
 
+int printRunningProcIsValid;
 // Process memory is laid out contiguously, low addresses first:
 //   text
 //   original data and bss
