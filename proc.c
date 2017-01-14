@@ -6,6 +6,13 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+//MYCODE
+int policyChooser = 0;
+#define RR           0      // Round Robin policy
+#define FRR           1      // FIFO Round Robin policy
+#define GRT           2      // Guaranteed (Fair-share) Scheduling policy
+#define Q3           3      // Multi-Level Queue Scheduling policy
+
 
 int mode = -1;
 
@@ -57,9 +64,9 @@ found:
   p->pid = nextpid++;
   p->rtime=0;
   p->ctime = ticks; ///set create position of new process
-
+  p->allChildSize = 0;
+//  cprintf("================%d starting\n",p->ctime);
   release(&ptable.lock);
-
   // Allocate kernel stack.
   if((p->kstack = kalloc()) == 0){
     p->state = UNUSED;
@@ -215,8 +222,16 @@ exit(void)
   proc->cwd = 0;
 
   acquire(&ptable.lock);
-
-  // Parent might be sleeping in wait().
+    proc->parent->childRTime[proc->parent->allChildSize]=proc->rtime;//Saves it
+    proc->parent->childCTime[proc->parent->allChildSize]=proc->ctime;//Saves it
+    proc->parent->childETime[proc->parent->allChildSize]=ticks;//Saves it
+    proc->parent->allChildSize++;//Adds it as one dead child
+//    cprintf("Real end time is:%d\n",ticks);
+//    cprintf("************process end time is:%d\n",proc->parent->childETime[proc->parent->allChildSize-1]);
+//    cprintf("(((((((((((process start time is:%d\n",proc->parent->childCTime[proc->parent->allChildSize-1]);
+//    cprintf("************process end time is:%d\n",&proc->parent->allChild[proc->parent->allChildSize]->etime);
+//    cprintf("(((((((((((process start time is:%d\n",&proc->parent->allChild[proc->parent->allChildSize]->ctime);
+    // Parent might be sleeping in wait().
   wakeup1(proc->parent);
 
   // Pass abandoned children to init.
@@ -232,7 +247,7 @@ exit(void)
   proc->state = ZOMBIE;
   proc->etime = ticks;
   sched();
-  panic("zombie exit");
+  panic("zombie exit\n");
 }
 
 // Wait for a child process to exit and return its pid.
@@ -290,16 +305,9 @@ void
 scheduler(void)
 {
   struct proc *p;
-  cprintf("Hello\n");
   for(;;){
     // Enable interrupts on this processor.
     sti();
-    //MYCODE
-    int policyChooser = 0;
-    #define RR           0      // Round Robin policy
-    #define FRR           1      // FIFO Round Robin policy
-    #define GRT           2      // Guaranteed (Fair-share) Scheduling policy
-    #define Q3           3      // Multi-Level Queue Scheduling policy
 
 
      // Loop over process table looking for process to run.

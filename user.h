@@ -25,6 +25,11 @@ int sleep(int);
 int uptime(void);
 int getppid(void);
 int getPerformanceData(int*, int*);
+int getAllChildsCtime(int childAt);
+int getAllChildsEtime(int childAt);
+int getAllChildsRtime(int childAt);
+int getChildSize(void);
+//int calculatePerfomance(int rtime,int ctime,int etime,int* wAndrTime);
 
 // ulib.c
 int stat(char*, struct stat*);

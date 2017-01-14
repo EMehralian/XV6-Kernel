@@ -64,6 +64,19 @@ argptr(int n, char **pp, int size)
   return 0;
 }
 
+int
+argArray(int n, int* pp, int size)
+{
+    int i;
+
+    if(argint(n, &i) < 0)
+        return -1;
+    if(size < 0 || (uint)i >= proc->sz || (uint)i+size > proc->sz)
+        return -1;
+    *pp = i;
+    return 0;
+}
+
 // Fetch the nth word-sized system call argument as a string pointer.
 // Check that the pointer is valid and the string is nul-terminated.
 // (There is no shared writable memory, so the string can't change
@@ -100,6 +113,11 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_getppid(void);
 extern int sys_getPerformanceData(void);
+extern int sys_getAllChildsCtime(void);
+extern int sys_getAllChildsEtime(void);
+extern int sys_getAllChildsRtime(void);
+extern int sys_getChildSize(void);
+//extern int sys_calculatePerfomance(int rtime,int ctime,int etime,int* wAndrTime);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -125,6 +143,11 @@ static int (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_getppid] sys_getppid,
 [SYS_getPerformanceData] sys_getPerformanceData,
+[SYS_getAllChildsCtime] sys_getAllChildsCtime,
+[SYS_getAllChildsEtime] sys_getAllChildsEtime,
+[SYS_getAllChildsRtime] sys_getAllChildsRtime,
+[SYS_getChildSize] sys_getChildSize,
+//[SYS_calculatePerfomance] sys_calculatePerfomance
 };
 
 void

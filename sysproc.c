@@ -110,7 +110,37 @@ sys_getPerformanceData(void)
   argstr(0, &wtime);
   argstr(1, &rtime);
 
-  *wtime = ticks-(proc->ctime)-(proc->rtime);
+  *wtime = proc->etime-(proc->ctime)-(proc->rtime);
   *rtime = proc->rtime;
   return 1;
+}
+
+
+int sys_calculatePerfomance(int rtime,int ctime,int etime,int* wAndrTime){
+    wAndrTime[0] = etime-(ctime)-(rtime);
+    wAndrTime[1] = rtime;
+    return 1;
+}
+
+int sys_getAllChildsRtime(void){
+    int childAt=-1;
+    argint(0,&childAt);
+    return proc->childRTime[childAt];
+}
+
+int sys_getAllChildsEtime(void){
+    int childAt=-1;
+    argint(0,&childAt);
+    return proc->childETime[childAt];
+}
+
+int sys_getAllChildsCtime(void){
+    int childAt;
+    argint(0,&childAt);
+    return proc->childCTime[childAt];
+}
+
+int sys_getChildSize(void)
+{
+    return proc->allChildSize;
 }

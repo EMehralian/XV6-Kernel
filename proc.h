@@ -65,10 +65,14 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
-  int ctime;                   //tick of cpu when process started
-  int etime;                   //tick of cpu when process ended
-  int rtime;                   //number of process tiks when process is in running state
+  uint ctime;                   //tick of cpu when process started
+  uint etime;                   //tick of cpu when process ended
+  uint rtime;                   //number of process tiks when process is in running state
   int processCounter;
+  int childCTime[64];
+  int childRTime[64];
+  int childETime[64];
+  int allChildSize;
 };
 
 // Process memory is laid out contiguously, low addresses first:

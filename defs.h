@@ -151,6 +151,12 @@ int             argstr(int, char**);
 int             fetchint(uint, int*);
 int             fetchstr(uint, char**);
 void            syscall(void);
+int             argArray(int n, int* pp, int size);
+//int sys_getAllChildsCtime(int* array);
+//int sys_getAllChildsEtime(int* array);
+//int sys_getAllChildsRtime(int* array);
+//int sys_getChildSize(void);
+//int sys_calculatePerfomance(int rtime,int ctime,int etime,int* wAndrTime);
 
 // timer.c
 void            timerinit(void);
