@@ -622,9 +622,10 @@ void printAllRunningProcesses() {
         cprintf("\n$$$$$$$$Running Processes are:");
         int i=0;
         for (i = 0; i < NPROC; ++i) {
-            if (ptable.proc[i].state == RUNNABLE ||
-                ptable.proc[i].state == RUNNING) {
-                cprintf("<%d>", &ptable.proc[i].pid);
+//            if (ptable.proc[i].state == RUNNABLE ||
+//                ptable.proc[i].state == RUNNING) {
+            if(ptable.proc[i].pid!=0){
+                cprintf("<%d>", ptable.proc[i].pid);
             }
         }
         cprintf("\n");
