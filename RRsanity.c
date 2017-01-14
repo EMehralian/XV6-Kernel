@@ -6,7 +6,7 @@ void
 child(int pid)
 {
   int i;
-  for (i=0;i<10;i++)
+  for (i=0;i<100;i++)
     printf(1, "Child: %d prints for the : %d  time\n",pid,i);
 }
 
