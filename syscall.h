@@ -26,4 +26,5 @@
 #define SYS_getAllChildsEtime	25
 #define SYS_getAllChildsRtime	26
 #define SYS_getChildSize	    27
+#define SYS_nice    28
 //#define SYS_calculatePerfomance	28

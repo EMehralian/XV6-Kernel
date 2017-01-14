@@ -7,11 +7,12 @@
 #include "spinlock.h"
 
 //MYCODE
-int policyChooser = 2;
 #define RR          0      // Round Robin policy
 #define FRR         1      // FIFO Round Robin policy
 #define GRT         2      // Guaranteed (Fair-share) Scheduling policy
 #define Q3          3      // Multi-Level Queue Scheduling policy
+
+int policyChooser = Q3;
 
 void sortProcessFIFO();
 
@@ -59,9 +60,11 @@ allocproc(void) {
     p->rtime = 0;
     p->ctime = ticks; ///set create position of new process
     p->allChildSize = 0;
-//      cprintf("================%d starting\n",p->ctime);
+    //cprintf("================%d starting\n",p->ctime);
     if (policyChooser == FRR) {
         sortProcessFIFO();
+    } else if (policyChooser == Q3) {
+        p->piority = HIGH_PIORITY;//Highest one
     }
     release(&ptable.lock);
     // Allocate kernel stack.
@@ -70,16 +73,13 @@ allocproc(void) {
         return 0;
     }
     sp = p->kstack + KSTACKSIZE;
-
     // Leave room for trap frame.
     sp -= sizeof *p->tf;
     p->tf = (struct trapframe *) sp;
-
     // Set up new context to start executing at forkret,
     // which returns to trapret.
     sp -= 4;
     *(uint *) sp = (uint) trapret;
-
     sp -= sizeof *p->context;
     p->context = (struct context *) sp;
     memset(p->context, 0, sizeof *p->context);
@@ -296,62 +296,28 @@ wait(void) {
 void
 scheduler(void) {
     struct proc *p;
-    for (;;) {
+    while (1) {
         // Enable interrupts on this processor.
         sti();
-
-
         // Loop over process table looking for process to run.
         acquire(&ptable.lock);
+        int GRTExists = 0;
+        int FRRExists = 0;
         //MYCODE
-        if (policyChooser == RR) {
-
-            for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
-                if (p->state != RUNNABLE)
-                    continue;
-
-                // Switch to chosen process.  It is the process's job
-                // to release ptable.lock and then reacquire it
-                // before jumping back to us.
-                proc = p;
-                switchuvm(p);
-                p->processCounter = 0;
-                p->state = RUNNING;
-
-                swtch(&cpu->scheduler, p->context);
-                switchkvm();
-
-                // Process is done running for now.
-                // It should have changed its p->state before coming back.
-                proc = 0;
-            }
-        } else if (policyChooser == FRR) {
-            for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
-                if (p->state != RUNNABLE)
-                    continue;
-                // Switch to chosen process.  It is the process's job
-                // to release ptable.lock and then reacquire it
-                // before jumping back to us.
-                proc = p;
-                switchuvm(p);
-                p->processCounter = 0;
-                p->state = RUNNING;
-
-                swtch(&cpu->scheduler, p->context);
-                switchkvm();
-
-                // Process is done running for now.
-                // It should have changed its p->state before coming back.
-                proc = 0;
-            }
-        } else if (policyChooser == GRT) {
+        if (policyChooser == GRT || policyChooser == Q3) {
             int i = 0;
-//        for(i=0;i<NPROC;i++) {
             int bestIndex = -1;
             float bestProcValue = -1;
             for (i = 0; i < NPROC; i++) {
                 if (ptable.proc[i].state != RUNNABLE) {
                     continue;
+                }
+                if (policyChooser == Q3) {
+                    if (ptable.proc[i].piority != HIGH_PIORITY) {
+                        continue;
+                    } else {
+                        GRTExists = 1;
+                    }
                 }
                 float down = (float) (ticks - ptable.proc[i].ctime);
                 float procValue = 0.0;
@@ -363,8 +329,8 @@ scheduler(void) {
                     bestIndex = i;
                 }
             }
-            if (bestIndex != -1 && ptable.proc[bestIndex].state==RUNNABLE
-                                   && ptable.proc[bestIndex].context!=0) {
+            if (bestIndex != -1 && ptable.proc[bestIndex].state == RUNNABLE
+                && ptable.proc[bestIndex].context != 0) {
 //                cprintf("\nHere:I am %d\n", bestIndex);
                 proc = &ptable.proc[bestIndex];
                 switchuvm(&ptable.proc[bestIndex]);
@@ -383,8 +349,61 @@ scheduler(void) {
             }
 //        }
         }
-        release(&ptable.lock);
+        if (policyChooser == FRR || (policyChooser == Q3 && GRTExists == 0)) {
+            for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+                if (p->state != RUNNABLE) {
+                    continue;
+                }
+                if (policyChooser == Q3) {
+                    if (p->piority == MEDIUM_PIORITY) {
+                        FRRExists = 1;
+                    } else {
+                        if(p->piority == LOW_PIORITY){
+                            cprintf("ERROR:Found a lost piority\n");
+                        }
+                        continue;
+                    }
+                }
+                // Switch to chosen process.  It is the process's job
+                // to release ptable.lock and then reacquire it
+                // before jumping back to us.
+                proc = p;
+                switchuvm(p);
+                p->processCounter = 0;
+                p->state = RUNNING;
 
+                swtch(&cpu->scheduler, p->context);
+                switchkvm();
+
+                // Process is done running for now.
+                // It should have changed its p->state before coming back.
+                proc = 0;
+            }
+        }
+        if (policyChooser == RR || (policyChooser == Q3 &&
+                GRTExists == 0 && FRRExists == 0)) {
+            for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+                if (p->state != RUNNABLE) {
+                    continue;
+                }
+                if(p->piority != LOW_PIORITY){
+                    cprintf("ERROR:Found a lost piority\n");
+                }
+                // Switch to chosen process.  It is the process's job
+                // to release ptable.lock and then reacquire it
+                // before jumping back to us.
+                proc = p;
+                switchuvm(p);
+                p->processCounter = 0;
+                p->state = RUNNING;
+                swtch(&cpu->scheduler, p->context);
+                switchkvm();
+                // Process is done running for now.
+                // It should have changed its p->state before coming back.
+                proc = 0;
+            }
+        }
+        release(&ptable.lock);
     }
 }
 

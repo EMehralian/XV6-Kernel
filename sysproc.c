@@ -115,13 +115,6 @@ sys_getPerformanceData(void)
   return 1;
 }
 
-
-int sys_calculatePerfomance(int rtime,int ctime,int etime,int* wAndrTime){
-    wAndrTime[0] = etime-(ctime)-(rtime);
-    wAndrTime[1] = rtime;
-    return 1;
-}
-
 int sys_getAllChildsRtime(void){
     int childAt=-1;
     argint(0,&childAt);
@@ -143,4 +136,23 @@ int sys_getAllChildsCtime(void){
 int sys_getChildSize(void)
 {
     return proc->allChildSize;
+}
+
+int sys_nice(void)
+{
+    switch (proc->piority){
+        case HIGH_PIORITY:
+            proc->piority = MEDIUM_PIORITY;
+            break;
+        case MEDIUM_PIORITY:
+            proc->piority = LOW_PIORITY;
+            break;
+        case LOW_PIORITY:
+            proc->piority = HIGH_PIORITY;
+            break;
+        default:
+            cprintf("Error:Unkonwn piority detected\n");
+            return -1;
+    }
+    return 0;
 }

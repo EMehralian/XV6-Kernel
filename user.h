@@ -29,6 +29,7 @@ int getAllChildsCtime(int childAt);
 int getAllChildsEtime(int childAt);
 int getAllChildsRtime(int childAt);
 int getChildSize(void);
+int nice(void);
 //int calculatePerfomance(int rtime,int ctime,int etime,int* wAndrTime);
 
 // ulib.c

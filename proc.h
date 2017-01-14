@@ -13,7 +13,9 @@ struct cpu {
   struct proc *proc;           // The currently-running process.
 };
 
-
+#define HIGH_PIORITY 2
+#define MEDIUM_PIORITY 1
+#define LOW_PIORITY 0
 
 extern struct cpu cpus[NCPU];
 extern int ncpu;
@@ -73,6 +75,7 @@ struct proc {
   int childRTime[64];
   int childETime[64];
   int allChildSize;
+  int piority;
 };
 
 // Process memory is laid out contiguously, low addresses first:
