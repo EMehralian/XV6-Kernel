@@ -118,6 +118,7 @@ extern int sys_getAllChildsEtime(void);
 extern int sys_getAllChildsRtime(void);
 extern int sys_getChildSize(void);
 extern int sys_nice(void);
+extern int sys_enableContextSwitchPrint(void);
 //extern int sys_calculatePerfomance(int rtime,int ctime,int etime,int* wAndrTime);
 
 static int (*syscalls[])(void) = {
@@ -149,6 +150,7 @@ static int (*syscalls[])(void) = {
 [SYS_getAllChildsRtime] sys_getAllChildsRtime,
 [SYS_getChildSize] sys_getChildSize,
 [SYS_nice]  sys_nice,
+[SYS_enableContextSwitchPrint] sys_enableContextSwitchPrint,
 //[SYS_calculatePerfomance] sys_calculatePerfomance
 };
 

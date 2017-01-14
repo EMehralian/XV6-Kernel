@@ -156,3 +156,15 @@ int sys_nice(void)
     }
     return 0;
 }
+
+///It shows that print is valid or not for ptable queue
+int sys_enableContextSwitchPrint(void) {
+    int isEnable;
+    argint(0, &isEnable);
+    if (isEnable > 0) {
+        printRunningProcIsValid = 1;
+    } else {
+        printRunningProcIsValid = 0;
+    }
+    return 0;
+}

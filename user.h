@@ -30,6 +30,7 @@ int getAllChildsEtime(int childAt);
 int getAllChildsRtime(int childAt);
 int getChildSize(void);
 int nice(void);
+int enableContextSwitchPrint(int isValid);
 //int calculatePerfomance(int rtime,int ctime,int etime,int* wAndrTime);
 
 // ulib.c
