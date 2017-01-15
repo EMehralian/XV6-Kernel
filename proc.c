@@ -220,6 +220,7 @@ exit(void) {
     proc->parent->childRTime[proc->parent->allChildSize] = proc->rtime;//Saves it
     proc->parent->childCTime[proc->parent->allChildSize] = proc->ctime;//Saves it
     proc->parent->childETime[proc->parent->allChildSize] = ticks;//Saves it
+    proc->parent->childPiority[proc->parent->allChildSize] = proc->piority;
     proc->parent->allChildSize++;//Adds it as one dead child
 //    cprintf("Real end time is:%d\n",ticks);
 //    cprintf("************process end time is:%d\n",proc->parent->childETime[proc->parent->allChildSize-1]);
@@ -295,6 +296,22 @@ wait(void) {
 //  - swtch to start running that process
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
+int GRTExists = 0;
+int FRRExists = 0;
+
+void checkForHigherPiority() {
+    struct proc *p;
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+        if (p->state == RUNNABLE || p->state == RUNNING) {
+            if (p->piority == HIGH_PIORITY) {
+                GRTExists = 1;
+            } else if (p->piority == MEDIUM_PIORITY) {
+                FRRExists = 1;
+            }
+        }
+    }
+}
+
 void
 scheduler(void) {
     struct proc *p;
@@ -304,8 +321,10 @@ scheduler(void) {
         sti();
         // Loop over process table looking for process to run.
         acquire(&ptable.lock);
-        int GRTExists = 0;
-        int FRRExists = 0;
+        GRTExists = 0;
+        FRRExists = 0;
+        checkForHigherPiority();
+
         //MYCODE
         if (policyChooser == GRT || policyChooser == Q3) {
             int i = 0;
@@ -318,9 +337,10 @@ scheduler(void) {
                 if (policyChooser == Q3) {
                     if (ptable.proc[i].piority != HIGH_PIORITY) {
                         continue;
-                    } else {
-                        GRTExists = 1;
                     }
+//                    else {
+//                        GRTExists = 1;
+//                    }
                 }
                 float down = (float) (ticks - ptable.proc[i].ctime);
                 float procValue = 0.0;
@@ -332,8 +352,7 @@ scheduler(void) {
                     bestIndex = i;
                 }
             }
-            if (bestIndex != -1 && ptable.proc[bestIndex].state == RUNNABLE
-                && ptable.proc[bestIndex].context != 0) {
+            if (bestIndex != -1) {
 //                cprintf("\nHere:I am %d\n", bestIndex);
                 proc = &ptable.proc[bestIndex];
                 switchuvm(&ptable.proc[bestIndex]);
@@ -362,9 +381,9 @@ scheduler(void) {
                     if (p->piority == MEDIUM_PIORITY) {
                         FRRExists = 1;
                     } else {
-                        if(p->piority == LOW_PIORITY){
-                            cprintf("ERROR:Found a lost piority\n");
-                        }
+//                        if(p->piority == LOW_PIORITY){
+//                            cprintf("ERROR:Found a lost piority\n");
+//                        }
                         continue;
                     }
                 }
@@ -382,16 +401,23 @@ scheduler(void) {
                 // Process is done running for now.
                 // It should have changed its p->state before coming back.
                 proc = 0;
+                if(policyChooser==Q3) {
+                    checkForHigherPiority();
+                    if(GRTExists==1) {
+                        break;
+                    }
+                }
             }
         }
         if (policyChooser == RR || (policyChooser == Q3 &&
-                GRTExists == 0 && FRRExists == 0)) {
+                                    GRTExists == 0 && FRRExists == 0)) {
             for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
                 if (p->state != RUNNABLE) {
                     continue;
                 }
-                if(p->piority != LOW_PIORITY){
-                    cprintf("ERROR:Found a lost piority\n");
+                if (p->piority != LOW_PIORITY) {
+                    continue;
+//                    cprintf("ERROR:Found a lost piority\n");
                 }
                 // Switch to chosen process.  It is the process's job
                 // to release ptable.lock and then reacquire it
@@ -406,6 +432,12 @@ scheduler(void) {
                 // Process is done running for now.
                 // It should have changed its p->state before coming back.
                 proc = 0;
+                if(policyChooser==Q3) {
+                    checkForHigherPiority();
+                    if(GRTExists==1 || FRRExists==1) {
+                        break;
+                    }
+                }
             }
         }
         release(&ptable.lock);
@@ -441,10 +473,14 @@ sched(void) {
 void
 yield(void) {
     if (policyChooser != GRT) {
+        if (proc->piority == HIGH_PIORITY && policyChooser == Q3) {
+            return;
+        }
         if (proc->processCounter < QUANTA) {
             proc->processCounter++;
             // cprintf("one QUANTA passed!%d\n",proc->pid);
         } else {
+            proc->processCounter = 0;
             acquire(&ptable.lock);  //DOC: yieldlock
             proc->state = RUNNABLE;
             sched();
@@ -618,13 +654,13 @@ void sortProcessFIFO() {
 }
 
 void printAllRunningProcesses() {
-    if (printRunningProcIsValid==1) {
+    if (printRunningProcIsValid == 1) {
         cprintf("\n$$$$$$$$Running Processes are:");
-        int i=0;
+        int i = 0;
         for (i = 0; i < NPROC; ++i) {
 //            if (ptable.proc[i].state == RUNNABLE ||
 //                ptable.proc[i].state == RUNNING) {
-            if(ptable.proc[i].pid!=0){
+            if (ptable.proc[i].pid != 0) {
                 cprintf("<%d>", ptable.proc[i].pid);
             }
         }

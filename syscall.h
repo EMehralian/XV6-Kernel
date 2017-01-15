@@ -28,4 +28,4 @@
 #define SYS_getChildSize	    27
 #define SYS_nice    28
 #define SYS_enableContextSwitchPrint    29
-//#define SYS_calculatePerfomance	28
+#define SYS_getChildPiorityAt   30

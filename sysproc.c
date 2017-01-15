@@ -154,7 +154,7 @@ int sys_nice(void)
             cprintf("Error:Unkonwn piority detected\n");
             return -1;
     }
-    return 0;
+    return proc->piority;
 }
 
 ///It shows that print is valid or not for ptable queue
@@ -167,4 +167,10 @@ int sys_enableContextSwitchPrint(void) {
         printRunningProcIsValid = 0;
     }
     return 0;
+}
+
+int sys_getChildPiorityAt(void){
+    int childAt;
+    argint(0,&childAt);
+    return proc->childPiority[childAt];
 }

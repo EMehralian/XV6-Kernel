@@ -38,3 +38,4 @@ SYSCALL(getChildSize)
 SYSCALL(getAllChildsCtime)
 SYSCALL(nice)
 SYSCALL(enableContextSwitchPrint)
+SYSCALL(getChildPiorityAt);

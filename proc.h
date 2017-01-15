@@ -74,6 +74,7 @@ struct proc {
   int childCTime[64];
   int childRTime[64];
   int childETime[64];
+  int childPiority[64];
   int allChildSize;
   int piority;
 };
