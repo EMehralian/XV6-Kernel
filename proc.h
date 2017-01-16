@@ -77,6 +77,9 @@ struct proc {
   int childPiority[64];
   int allChildSize;
   int piority;
+  int isAlive;
+  int* wTimeAddr;
+  int* rTimeAddr;
 };
 
 int printRunningProcIsValid;

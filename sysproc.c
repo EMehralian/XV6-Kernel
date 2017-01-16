@@ -102,24 +102,7 @@ sys_getppid(void)
 int
 sys_getPerformanceData(void)
 {
-//   while(proc->state != UNUSED);
-  int i = wait();
-  cprintf("wait%d\n",i);
-  int *wtime=0 ;
-  int *rtime=0;
-// argstr(int n, char **pp)
-
-  argptr(0, (char **)&wtime, sizeof(int));
-  argptr(1, (char **)&rtime, sizeof(int));
-
-  *wtime = proc->etime-(proc->ctime)-(proc->rtime);
-  *rtime = proc->ctime;
-  cprintf("REALeTime:%d\n",proc->etime);
-  cprintf("REALwTime*:%d\n",*wtime);
-  cprintf("REALrTime*:%d\n",*rtime);
-    cprintf("REALwTime:%d\n",wtime);
-    cprintf("REALrTime:%d\n",rtime);
-  return i;
+  return getPerformanceData();
 }
 
 int sys_getAllChildsRtime(void){

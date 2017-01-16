@@ -116,6 +116,8 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+// int waitUntilDead(struct proc* deadProc);
+int 			getPerformanceData(void);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

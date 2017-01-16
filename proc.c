@@ -62,6 +62,7 @@ allocproc(void) {
     p->rtime = 0;
     p->ctime = ticks; ///set create position of new process
     p->allChildSize = 0;
+    p->isAlive = 1;
     //cprintf("================%d starting\n",p->ctime);
     if (policyChooser == FRR) {
         sortProcessFIFO();
@@ -242,12 +243,63 @@ exit(void) {
     // Jump into the scheduler, never to return.
     proc->state = ZOMBIE;
     proc->etime = ticks;
+    // if(proc->isAlive==0){
+    //   cprintf("//////////////////////////////////////////////");
+    //   // int wtime =0;
+    //   // int rtime =0;
+    //   *proc->wTimeAddr = proc->etime-(proc->ctime)-(proc->rtime);
+    //   *proc->rTimeAddr = proc->ctime;
+    //   cprintf("REALwTime:%d\n",proc->wTimeAddr);
+    //   cprintf("REALrTime:%d\n",proc->rTimeAddr);
+    // }
     sched();
     panic("zombie exit\n");
 }
 
-// Wait for a child process to exit and return its pid.
-// Return -1 if this process has no children.
+
+int
+getPerformanceData(void) {
+    struct proc *p;
+    int havekids,pid;
+
+    acquire(&ptable.lock);
+    for (;;) {
+        // Scan through table looking for exited children.
+        havekids = 0;
+        for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+            if (p->parent != proc)
+                continue;
+            havekids = 1;
+            if (p->state == ZOMBIE) {
+                // Found one.
+                char *wtime = 0, *rtime = 0;
+                argptr(0, &wtime, sizeof(int));
+                argptr(1, &rtime, sizeof(int));
+
+                *wtime = (p->etime - p->ctime) - p->rtime;
+                *rtime = p->rtime;
+                pid = p->pid;
+                kfree(p->kstack);
+                p->kstack = 0;
+                freevm(p->pgdir);
+                p->pid = 0;
+                p->parent = 0;
+                p->name[0] = 0;
+                p->killed = 0;
+                p->state = UNUSED;
+                release(&ptable.lock);
+                return pid;
+            }
+        }
+        // No point waiting if we don't have any children.
+        if (!havekids || proc->killed) {
+            release(&ptable.lock);
+            return -1;
+        }
+        // Wait for children to exit.  (See wakeup1 call in proc_exit.)
+        sleep(proc, &ptable.lock);  //DOC: wait-sleep
+    }
+}
 int
 wait(void) {
     struct proc *p;
@@ -354,12 +406,13 @@ scheduler(void) {
             }
             if (bestIndex != -1) {
                 proc = &ptable.proc[bestIndex];
+                printAllRunningProcesses();
                 switchuvm(&ptable.proc[bestIndex]);
                 ptable.proc[bestIndex].processCounter = 0;
                 ptable.proc[bestIndex].state = RUNNING;
                 swtch(&cpu->scheduler, ptable.proc[bestIndex].context);
                 switchkvm();
-                printAllRunningProcesses();
+                
                 // Process is done running for now.
                 // It should have changed its p->state before coming back.
                 proc = 0;
@@ -385,13 +438,14 @@ scheduler(void) {
                 // to release ptable.lock and then reacquire it
                 // before jumping back to us.
                 proc = p;
+                printAllRunningProcesses();
                 switchuvm(p);
                 p->processCounter = 0;
                 p->state = RUNNING;
-
+ 
                 swtch(&cpu->scheduler, p->context);
                 switchkvm();
-                printAllRunningProcesses();
+               
                 // Process is done running for now.
                 // It should have changed its p->state before coming back.
                 proc = 0;
@@ -419,12 +473,13 @@ scheduler(void) {
                 // to release ptable.lock and then reacquire it
                 // before jumping back to us.
                 proc = p;
+                printAllRunningProcesses();
                 switchuvm(p);
                 p->processCounter = 0;
                 p->state = RUNNING;
                 swtch(&cpu->scheduler, p->context);
                 switchkvm();
-                printAllRunningProcesses();
+                
                 // Process is done running for now.
                 // It should have changed its p->state before coming back.
                 proc = 0;

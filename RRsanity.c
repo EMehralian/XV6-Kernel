@@ -22,6 +22,9 @@ rrSanity(void)
         pid = fork();
         if(pid==0)
         {
+           int a = 0;
+           int b=0;
+          getPerformanceData(&a,&b);
             child(getpid());
             exit();
         } else if(pid>0) {
@@ -33,13 +36,14 @@ rrSanity(void)
     }
     int k=0;
     for(k=0;k<CHILD_NUM;k++) {
-        int a=0;
-        int b=0;
-        getPerformanceData(&a,&b);
-        // wait();
-        childrenrTime[k]=a;
-        childrenwTime[k]=b;
-        // printf(1,"MYChild %d perfomance is:rTime:%d:wTime:%d:\n",k,a,b); 
+        int wtime;
+        int rtime;
+
+        getPerformanceData(&wtime, &rtime);
+
+        childrenwTime[k] = wtime;
+        childrenrTime[k] = rtime;
+
     }
     printf(1,"Parent finished work\n");
     int numOfChilds=getChildSize();
