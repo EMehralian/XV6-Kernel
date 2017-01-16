@@ -109,7 +109,7 @@ int             growproc(int);
 int             kill(int);
 void            pinit(void);
 void            procdump(void);
-void            scheduler(void) __attribute__((noreturn));
+void            scheduler(void)__attribute__((noreturn));
 void            sched(void);
 void            sleep(void*, struct spinlock*);
 void            userinit(void);
@@ -151,6 +151,7 @@ int             argstr(int, char**);
 int             fetchint(uint, int*);
 int             fetchstr(uint, char**);
 void            syscall(void);
+int             argArray(int n, int* pp, int size);
 
 // timer.c
 void            timerinit(void);

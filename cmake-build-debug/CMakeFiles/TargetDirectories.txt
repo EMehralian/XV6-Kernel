@@ -1,0 +1,3 @@
+/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/CMakeFiles/xv6.dir

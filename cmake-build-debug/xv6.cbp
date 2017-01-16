@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="xv6"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="xv6">
+				<Option output="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/xv6" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 xv6"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="xv6/fast">
+				<Option output="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/xv6" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 xv6/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/asm.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/bio.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/bootmain.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/buf.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/cat.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/console.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/date.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/defs.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/echo.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/elf.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/exec.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/fcntl.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/file.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/file.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/forktest.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/fs.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/fs.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/grep.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/ide.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/init.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/ioapic.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/kalloc.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/kbd.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/kbd.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/kill.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/lapic.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/ln.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/log.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/ls.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/main.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/memide.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/memlayout.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/mkdir.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/mkfs.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/mmu.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/mp.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/mp.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/param.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/picirq.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/pipe.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/printf.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/proc.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/proc.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/rm.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/sh.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/sleeplock.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/sleeplock.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/spinlock.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/spinlock.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/stat.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/stressfs.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/string.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/syscall.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/syscall.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/sysfile.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/sysproc.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/testppid.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/timer.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/trap.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/traps.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/types.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/uart.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/ulib.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/umalloc.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/user.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/usertests.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/vm.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/wc.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/x86.h">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/zombie.c">
+			<Option target="xv6"/>
+		</Unit>
+		<Unit filename="/home/mohammad/Desktop/OS/EditedXV6/XV6-Kernel/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

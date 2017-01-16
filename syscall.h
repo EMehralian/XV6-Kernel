@@ -21,4 +21,11 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_getppid 22
-#define SYS_getPerformanceData 23
+#define SYS_getPerformanceData	23
+#define SYS_getAllChildsCtime	24
+#define SYS_getAllChildsEtime	25
+#define SYS_getAllChildsRtime	26
+#define SYS_getChildSize	    27
+#define SYS_nice    28
+#define SYS_enableContextSwitchPrint    29
+#define SYS_getChildPiorityAt   30
